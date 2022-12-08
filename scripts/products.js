@@ -3,6 +3,8 @@
 window.onload = init;
 function init() {
     document.getElementById("selectId").onchange = displayViewAll;
+    
+
 }
 
 function displayViewAll() {
@@ -63,4 +65,5 @@ function displayViewAll() {
 
 
 }
+
 
