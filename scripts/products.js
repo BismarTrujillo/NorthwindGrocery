@@ -2,12 +2,8 @@
 
 window.onload = init;
 function init() {
-    displayViewAll();
-    document.getElementById("viewAllSelected").onchange = displayViewAll;
+    document.getElementById("selectId").onchange = displayViewAll;
 }
-
-
-
 
 function displayViewAll() {
 
@@ -44,11 +40,17 @@ function displayViewAll() {
                             text2.className = "card-text";
                             text2.innerText = products[j].supplier
                             cardBody.appendChild(text2);
-
+                            
                             let text3 = document.createElement("p");
                             text3.className = "card-text";
-                            text3.innerText = products[j].categoryId
+                            text3.innerText = "product ID: " + products[j].productId
                             cardBody.appendChild(text3);
+
+                            let seeDetailsLink = document.createElement("a")
+                            seeDetailsLink.innerHTML = "see details"
+                            seeDetailsLink.href = //api 
+                            seeDetailsLink.target = "_blank"
+                            cardBody.appendChild(seeDetailsLink);
 
                         }
 
