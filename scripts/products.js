@@ -2,7 +2,9 @@
 
 window.onload = init;
 function init() {
+    displayCategoriesDropdown();
     document.getElementById("selectId").onchange = displayDropdown;
+    document.getElementById("categoriesListId").onchange = displayCategoriesProducts;
 
 }
 
@@ -79,21 +81,72 @@ function displayCategoriesDropdown() {
     let blankOption = document.createElement("option");
     blankOption.innerText = "Select a category";
     categoriesListId.appendChild(blankOption);
-
-
+    displayCategoriesProducts();
+}
+function displayCategoriesProducts() {
+    categoryContainer.innerHTML = " ";
     fetch('http://localhost:8081/api/categories')
         .then(response => response.json())
         .then(categories => {
             for (let i in categories) {
+                
                 let categoriesListId = document.getElementById("categoriesListId");
 
                 let optionElement = document.createElement("option");
                 optionElement.innerText = categories[i].name
                 categoriesListId.appendChild(optionElement);
 
+                if (categoriesListId.value == categories[i].name) {
+                    for (let i = 1; i <= categories.length; i++) {
+                        fetch('http://localhost:8081/api/categories/' + i)
+                            .then(response => response.json())
+                            .then(products => {
+
+                                for (let z in products) {
+                                    let categoryContainer = document.getElementById("categoryContainer");
+
+                                    let card = document.createElement("div");
+                                    card.className = "card col-sm-6 col-lg-3 m-4";
+                                    categoryContainer.appendChild(card);
+
+                                    let cardBody = document.createElement("div");
+                                    cardBody.className = "card-body";
+                                    card.appendChild(cardBody);
+
+                                    let title = document.createElement("h5");
+                                    title.className = "card-title";
+                                    title.innerText = products[z].productName
+                                    cardBody.appendChild(title);
+
+                                    let text1 = document.createElement("p");
+                                    text1.className = "card-text";
+                                    text1.innerText = "$" + products[z].unitPrice + " Units in stock: " + products[z].unitsInStock
+                                    cardBody.appendChild(text1);
+
+                                    let text2 = document.createElement("p");
+                                    text2.className = "card-text";
+                                    text2.innerText = products[z].supplier
+                                    cardBody.appendChild(text2);
+
+                                    let text3 = document.createElement("p");
+                                    text3.className = "card-text";
+                                    text3.innerText = "product ID: " + products[z].productId
+                                    cardBody.appendChild(text3);
+
+                                    let seeDetailsLink = document.createElement("a")
+                                    seeDetailsLink.innerHTML = "see details"
+                                    seeDetailsLink.href = //api 
+                                        seeDetailsLink.target = "_blank"
+                                    cardBody.appendChild(seeDetailsLink);
+
+                                }
+
+                            })
+                    }
+                }
             }
-            
-            if (categoriesListId.value == categories[i].name)
+
+
         })
 }
 
