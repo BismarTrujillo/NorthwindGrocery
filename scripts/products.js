@@ -1,17 +1,25 @@
 "use strict"
-
+const categoriesListId = document.getElementById("categoriesListId");
 window.onload = init;
 function init() {
-    displayCategoriesDropdown();
+    categoriesListIdDropdown()
     document.getElementById("selectId").onchange = displayDropdown;
     document.getElementById("categoriesListId").onchange = displayCategoriesProducts;
+    categoriesListId.style.display = "none";
+}
+function categoriesListIdDropdown() {
+    let selectElement = document.createElement("select");
+    selectElement.className = "form-select";
+    selectElement.id = "categoriesListId";
+    selectElement.value = "categoriesListId";
+    categoryContainer.appendChild(selectElement);
 
 }
-
 function displayDropdown() {
-
+    productContainer.innerHTML = " ";
+    categoryContainer.innerHTML = " ";
     if (selectId.value == "viewAll") {
-        productContainer.innerHTML = " ";
+        productContainer.innerHTML = "";
         fetch('http://localhost:8081/api/categories')
             .then(response => response.json())
             .then(categories => {
@@ -65,43 +73,39 @@ function displayDropdown() {
 
             })
     } else if (selectId.value == "searchByCategory") {
+        
+        let blankOption = document.createElement("option");
+        blankOption.innerText = "Select a category";
+        categoriesListId.appendChild(blankOption);
+        categoriesListId.style.display = "block";
+
+        displayCategoriesProducts();
+    } else
         productContainer.innerHTML = " ";
-        displayCategoriesDropdown();
-    }
 
-}
-function displayCategoriesDropdown() {
-
-    let selectElement = document.createElement("select");
-    selectElement.className = "form-select";
-    selectElement.id = "categoriesListId";
-    selectElement.value = "categoryListId";
-    productContainer.appendChild(selectElement);
-
-    let blankOption = document.createElement("option");
-    blankOption.innerText = "Select a category";
-    categoriesListId.appendChild(blankOption);
-    displayCategoriesProducts();
 }
 function displayCategoriesProducts() {
-    categoryContainer.innerHTML = " ";
+
     fetch('http://localhost:8081/api/categories')
         .then(response => response.json())
         .then(categories => {
             for (let i in categories) {
                 
-                let categoriesListId = document.getElementById("categoriesListId");
+                
 
                 let optionElement = document.createElement("option");
                 optionElement.innerText = categories[i].name
+                optionElement.value = categories[i].name
                 categoriesListId.appendChild(optionElement);
+                // categoryContainer.innerHTML = categoriesListId.value
 
                 if (categoriesListId.value == categories[i].name) {
+                    categoryContainer.innerHTML = categoriesListId
                     for (let i = 1; i <= categories.length; i++) {
                         fetch('http://localhost:8081/api/categories/' + i)
                             .then(response => response.json())
                             .then(products => {
-
+                                categoryContainer.innerHTML = "products[i].name";
                                 for (let z in products) {
                                     let categoryContainer = document.getElementById("categoryContainer");
 
@@ -133,12 +137,6 @@ function displayCategoriesProducts() {
                                     text3.innerText = "product ID: " + products[z].productId
                                     cardBody.appendChild(text3);
 
-                                    let seeDetailsLink = document.createElement("a")
-                                    seeDetailsLink.innerHTML = "see details"
-                                    seeDetailsLink.href = //api 
-                                        seeDetailsLink.target = "_blank"
-                                    cardBody.appendChild(seeDetailsLink);
-
                                 }
 
                             })
@@ -149,8 +147,3 @@ function displayCategoriesProducts() {
 
         })
 }
-
-
-
-
-
